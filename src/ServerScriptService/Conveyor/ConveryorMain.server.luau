@@ -3,6 +3,8 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Workspace = game:GetService("Workspace")
 
 local ChangeDropTimeEvent = ReplicatedStorage:WaitForChild("ChangeDropTime") :: RemoteEvent
+local ClickedBaggageEvent = ReplicatedStorage:WaitForChild("ClickedBaggage") :: RemoteEvent
+
 
 type DropperType = {
     Part: BasePart,
@@ -30,6 +32,11 @@ ChangeDropTimeEvent.OnServerEvent:Connect(function(player: Player, newDropTime: 
     CollectionService:AddTag(player, "Owner")
 
     DropTime = newDropTime
+end)
+
+ClickedBaggageEvent.OnServerEvent:Connect(function(player: Player, baggagePart: BasePart)
+     local baggageId = baggagePart.Name:match("%d+$")
+    print(baggageId)
 end)
 
 while true do
