@@ -17,7 +17,7 @@ function Dropper.new(part: BasePart)
 end
 
 function Dropper:Activate()
-    print("Dropper activated for part: " .. self.Part.Name)
+    -- print("Dropper activated for part: " .. self.Part.Name)
 
     local newBaggage = self.BaggageTemplate:Clone()
     CollectionService:AddTag(newBaggage, "Baggage")

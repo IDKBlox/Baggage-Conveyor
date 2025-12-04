@@ -17,7 +17,7 @@ function Destroyer.new(part: BasePart)
 end
 
 function Destroyer:OnActivate(hitPart: BasePart)
-    print("Destroyer activated for part: " .. self.Part.Name .. ", destroying: " .. hitPart.Name)
+    -- print("Destroyer activated for part: " .. self.Part.Name .. ", destroying: " .. hitPart.Name)
     hitPart:Destroy()
 end
 
