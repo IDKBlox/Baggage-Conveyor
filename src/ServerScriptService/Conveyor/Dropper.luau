@@ -1,5 +1,6 @@
 local CollectionService = game:GetService("CollectionService")
 local ServerStorage = game:GetService("ServerStorage")
+local TweenService = game:GetService("TweenService")
 
 
 local Dropper = {}
@@ -27,12 +28,47 @@ function Dropper:Activate()
 
     newBaggage.Material = randomMaterial
     newBaggage.Color = randomizeColor
-    
+
     self.BaggageCount  += 1
     newBaggage.Name = string.format("Baggage_%s_%d", self.Part.Name, self.BaggageCount)
     CollectionService:AddTag(newBaggage, "Baggage")
     newBaggage.CFrame = self.Part.CFrame * CFrame.new(0, -self.Part.Size.Y / 2 - newBaggage.Size.Y / 2, 0)
     newBaggage.Parent = self.Part.Parent
+
+      local originalSize = newBaggage.Size
+    newBaggage.Size = Vector3.new(0.1, 0.1, 0.1)
+    newBaggage.Transparency = 1
+    
+    local spawnTween = TweenService:Create(
+        newBaggage,
+        TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.Out),
+        {
+            Size = originalSize,
+            Transparency = 0
+        }
+    )
+    
+    spawnTween:Play()
+
+    -- additional cleanup after 60 seconds
+    task.delay(60, function()
+        if newBaggage and newBaggage.Parent then
+            newBaggage.CanCollide = false
+            local despawnTween = TweenService:Create(
+                newBaggage,
+                TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.In),
+                {
+                    Size = Vector3.new(0, 0, 0),
+                    Transparency = 1
+                }
+            )
+            
+            despawnTween:Play()
+            despawnTween.Completed:Connect(function()
+                newBaggage:Destroy()
+            end)
+        end
+    end)
 end
 
 return Dropper
